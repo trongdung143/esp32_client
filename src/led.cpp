@@ -6,6 +6,6 @@ void led_init()
 {
     led.begin();
     led.show();
-    led.setPixelColor(0, led.Color(255, 255, 255));
-    led.show();
+    // led.setPixelColor(0, led.Color(255, 255, 255));
+    // led.show();
 }

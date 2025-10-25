@@ -9,3 +9,4 @@ extern SPIClass spi;
 extern Adafruit_GC9A01A tft;
 
 void display_init();
+void display_text(const String &text, uint16_t text_color);

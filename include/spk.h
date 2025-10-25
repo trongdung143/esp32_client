@@ -5,3 +5,4 @@
 
 void spk_init();
 void spk_task(void *param);
+static void update_state();
