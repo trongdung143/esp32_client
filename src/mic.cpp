@@ -40,7 +40,7 @@ void mic_task(void *param)
     {
         if (!mic_enabled)
         {
-            vTaskDelay(pdMS_TO_TICKS(50));
+            vTaskDelay(pdMS_TO_TICKS(100));
             continue;
         }
 

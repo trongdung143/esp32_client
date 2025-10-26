@@ -12,6 +12,8 @@ void wifi_connect()
 
     if (connected)
     {
+        String ssid = WiFi.SSID();
+        display_text("connected to " + ssid, GC9A01A_GREEN);
         ws_connect();
     }
     else
@@ -36,15 +38,13 @@ static void on_ws_event(WStype_t type, uint8_t *payload, size_t length)
     }
     else if (type == WStype_DISCONNECTED)
     {
-        display_text("disconnected", GC9A01A_RED);
+        display_text("disconnect-server", GC9A01A_RED);
     }
     else if (type == WStype_TEXT)
     {
         String msg = String((char *)payload);
         if (msg.startsWith("start_stream_audio"))
         {
-            uint8_t index = msg.indexOf("chunks=");
-            chunks = msg.substring(index + String("chunks=").length()).toInt();
             pcm_receiving = true;
         }
         else if (msg.startsWith("end_stream_audio"))
@@ -63,7 +63,7 @@ static void on_ws_event(WStype_t type, uint8_t *payload, size_t length)
                 PcmChunk chunk = {pcm, length};
                 xQueueSend(server_to_spk, &chunk, 0);
                 UBaseType_t count = uxQueueMessagesWaiting(server_to_spk);
-                if (!spk_enabled && count >= chunks / 2)
+                if (!spk_enabled && count >= 1)
                 {
                     spk_enabled = true;
                     display_text("speak", GC9A01A_GREEN);
@@ -99,7 +99,7 @@ void send_pcm_task(void *param)
     {
         if (!pcm_sending)
         {
-            vTaskDelay(pdMS_TO_TICKS(50));
+            vTaskDelay(pdMS_TO_TICKS(100));
             continue;
         }
 

@@ -28,12 +28,11 @@ void spk_init()
 void spk_task(void *param)
 {
     (void *)param;
-    float volume = 0.7f;
     while (true)
     {
         if (!spk_enabled)
         {
-            vTaskDelay(pdMS_TO_TICKS(50));
+            vTaskDelay(pdMS_TO_TICKS(100));
             continue;
         }
 
@@ -43,18 +42,6 @@ void spk_task(void *param)
         {
             if (chunk.pcm && chunk.bytes > 0)
             {
-                size_t samples = chunk.bytes / sizeof(int16_t);
-
-                for (size_t i = 0; i < samples; i++)
-                {
-                    int32_t val = (int32_t)(chunk.pcm[i] * volume);
-                    if (val > 32767)
-                        val = 32767;
-                    if (val < -32768)
-                        val = -32768;
-                    chunk.pcm[i] = (int16_t)val;
-                }
-
                 size_t bytes_written;
                 i2s_write(I2S_SPK_PORT, chunk.pcm, chunk.bytes, &bytes_written, portMAX_DELAY);
 

@@ -9,7 +9,6 @@ extern volatile bool mic_enabled;
 extern volatile bool spk_enabled;
 extern volatile bool pcm_sending;
 extern volatile bool pcm_receiving;
-extern volatile uint16_t chunks;
 
 struct PcmChunk
 {
@@ -34,7 +33,7 @@ struct PcmChunk
 #define I2S_SPK_DOUT 7
 #define I2S_SPK_SAMPLE_RATE 16000
 #define I2S_SPK_DMA_BUF_LEN 512
-#define I2S_SPK_DMA_BUF_COUNT 4
+#define I2S_SPK_DMA_BUF_COUNT 6
 #define WRITE_INTERVAL 32
 
 // MÀN HÌNH (GC9A01A – SPI)

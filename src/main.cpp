@@ -11,7 +11,6 @@ volatile bool mic_enabled = false;
 volatile bool pcm_sending = false;
 volatile bool spk_enabled = false;
 volatile bool pcm_receiving = false;
-volatile uint16_t chunks;
 
 void setup()
 {
