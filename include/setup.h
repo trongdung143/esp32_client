@@ -49,8 +49,11 @@ struct PcmChunk
 #define LED_PIN 48
 #define LED_COUNT 1
 
+// TOUCH
+#define TOUCH_PIN 8
+
 // WebSocket
-#define IP_SERVER "192.168.1.100"
+#define IP_SERVER "192.168.1.200"
 #define PORT_SERVER 8080
 #define END_POINT_AUDIO "/ws_audio"
 #define CLIENT_ID "c7b12d5f-8a3e-4bc1-ae3d-9f6a1200a52b"

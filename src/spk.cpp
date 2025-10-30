@@ -38,11 +38,12 @@ void spk_task(void *param)
 
         PcmChunk chunk;
 
-        if (xQueueReceive(server_to_spk, &chunk, pdMS_TO_TICKS(200)) == pdTRUE)
+        if (xQueueReceive(server_to_spk, &chunk, pdMS_TO_TICKS(2000)) == pdTRUE)
         {
             if (chunk.pcm && chunk.bytes > 0)
             {
                 size_t bytes_written;
+
                 i2s_write(I2S_SPK_PORT, chunk.pcm, chunk.bytes, &bytes_written, portMAX_DELAY);
 
                 heap_caps_free(chunk.pcm);

@@ -31,7 +31,7 @@ void mic_task(void *param)
 {
     (void)param;
 
-    uint8_t buff_size = 2;
+    uint8_t buff_size = 3;
     int32_t i2s_read_buff[I2S_MIC_DMA_BUF_LEN * buff_size];
     int16_t buf[I2S_MIC_DMA_BUF_LEN * buff_size];
     size_t bytes_read;

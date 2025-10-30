@@ -104,7 +104,7 @@ void send_pcm_task(void *param)
         }
 
         PcmChunk chunk;
-        if (xQueueReceive(mic_to_server, &chunk, pdMS_TO_TICKS(2000)) == pdTRUE)
+        if (xQueueReceive(mic_to_server, &chunk, pdMS_TO_TICKS(1000)) == pdTRUE)
         {
             if (chunk.pcm && chunk.bytes > 0 && ws.isConnected())
                 ws.sendBIN((uint8_t *)chunk.pcm, chunk.bytes);
