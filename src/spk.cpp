@@ -56,12 +56,15 @@ void spk_task(void *param)
 
 static void update_state()
 {
-    clear_queue_and_free(server_to_spk);
-    clear_queue_and_free(mic_to_server);
-
     spk_enabled = false;
-    pcm_receiving = false;
-    pcm_sending = false;
+    clear_queue_and_free(server_to_spk);
+    i2s_stop(I2S_SPK_PORT);
+
+    vTaskDelay(pdMS_TO_TICKS(100));
+
+    clear_queue_and_free(mic_to_server);
+    clear_queue_and_free(temp_is_silent);
+    i2s_start(I2S_MIC_PORT);
     mic_enabled = true;
 
     display_text("listen", GC9A01A_ORANGE);

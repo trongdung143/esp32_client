@@ -5,6 +5,8 @@
 
 extern QueueHandle_t mic_to_server;
 extern QueueHandle_t server_to_spk;
+extern QueueHandle_t temp_is_silent;
+
 extern volatile bool mic_enabled;
 extern volatile bool spk_enabled;
 extern volatile bool pcm_sending;

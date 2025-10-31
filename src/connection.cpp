@@ -1,6 +1,7 @@
 #include "connection.h"
 #include "display.h"
 #include "utils.h"
+#include "spk.h"
 
 WebSocketsClient ws;
 
@@ -65,6 +66,7 @@ static void on_ws_event(WStype_t type, uint8_t *payload, size_t length)
                 UBaseType_t count = uxQueueMessagesWaiting(server_to_spk);
                 if (!spk_enabled && count >= 1)
                 {
+                    i2s_start(I2S_SPK_PORT);
                     spk_enabled = true;
                     display_text("speak", GC9A01A_GREEN);
                 }
@@ -123,4 +125,5 @@ static void update_state()
     display_text("thinking", GC9A01A_YELLOW);
     pcm_sending = false;
     mic_enabled = false;
+    i2s_stop(I2S_MIC_PORT);
 }

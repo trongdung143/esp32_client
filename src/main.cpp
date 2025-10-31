@@ -8,6 +8,7 @@
 
 QueueHandle_t mic_to_server;
 QueueHandle_t server_to_spk;
+QueueHandle_t temp_is_silent;
 volatile bool mic_enabled = false;
 volatile bool pcm_sending = false;
 volatile bool spk_enabled = false;
@@ -19,6 +20,7 @@ void setup()
   pinMode(TOUCH_PIN, INPUT);
   mic_to_server = xQueueCreate(50, sizeof(PcmChunk));
   server_to_spk = xQueueCreate(500, sizeof(PcmChunk));
+  temp_is_silent = xQueueCreate(12, sizeof(PcmChunk));
   display_init();
   led_init();
   mic_init();

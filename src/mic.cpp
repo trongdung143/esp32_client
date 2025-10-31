@@ -1,6 +1,7 @@
 #include "mic.h"
 #include "connection.h"
 #include "display.h"
+#include "utils.h"
 void mic_init()
 {
     i2s_config_t cfg = {
@@ -48,17 +49,34 @@ void mic_task(void *param)
 
         shift_bit(i2s_read_buff, buf, bytes_read / 4);
 
+        int16_t *pcm = (int16_t *)heap_caps_malloc(bytes_read / 2, MALLOC_CAP_SPIRAM);
+
+        memcpy(pcm, buf, bytes_read / 2);
+
+        PcmChunk chunk = {pcm, bytes_read / 2};
+
         if (!is_silent(buf, bytes_read / 4, SILENCE_THRESHOLD))
         {
-            int16_t *pcm = (int16_t *)heap_caps_malloc(bytes_read / 2, MALLOC_CAP_SPIRAM);
+            if (uxQueueMessagesWaiting(temp_is_silent) != 0)
+            {
+                PcmChunk temp_chunk;
 
-            memcpy(pcm, buf, bytes_read / 2);
-            PcmChunk chunk = {pcm, bytes_read / 2};
+                while (xQueueReceive(temp_is_silent, &temp_chunk, 0) == pdTRUE)
+                {
+                    xQueueSend(mic_to_server, &temp_chunk, 0);
+                }
+                clear_queue_and_free(temp_is_silent);
+            }
 
             xQueueSend(mic_to_server, &chunk, 0);
+
             UBaseType_t count = uxQueueMessagesWaiting(mic_to_server);
 
             update_state(count);
+        }
+        else
+        {
+            xQueueSend(temp_is_silent, &chunk, 0);
         }
     }
 }
