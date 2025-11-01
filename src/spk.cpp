@@ -67,5 +67,5 @@ static void update_state()
     i2s_start(I2S_MIC_PORT);
     mic_enabled = true;
 
-    display_text("listen", GC9A01A_ORANGE);
+    face_state = 1;
 }

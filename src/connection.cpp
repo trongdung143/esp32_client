@@ -3,6 +3,8 @@
 #include "utils.h"
 #include "spk.h"
 
+extern volatile uint8_t face_state;
+
 WebSocketsClient ws;
 
 void wifi_connect()
@@ -27,6 +29,8 @@ static void on_ws_event(WStype_t type, uint8_t *payload, size_t length)
 {
     if (type == WStype_CONNECTED)
     {
+        display_face_enabled = true;
+
         clear_queue_and_free(server_to_spk);
         clear_queue_and_free(mic_to_server);
 
@@ -35,10 +39,12 @@ static void on_ws_event(WStype_t type, uint8_t *payload, size_t length)
         pcm_sending = false;
         mic_enabled = true;
 
-        display_text("listen", GC9A01A_ORANGE);
+        face_state = 1;
     }
     else if (type == WStype_DISCONNECTED)
     {
+        display_face_enabled = false;
+        display_clear();
         display_text("disconnect-server", GC9A01A_RED);
     }
     else if (type == WStype_TEXT)
@@ -68,7 +74,7 @@ static void on_ws_event(WStype_t type, uint8_t *payload, size_t length)
                 {
                     i2s_start(I2S_SPK_PORT);
                     spk_enabled = true;
-                    display_text("speak", GC9A01A_GREEN);
+                    face_state = 2;
                 }
             }
         }
@@ -77,6 +83,7 @@ static void on_ws_event(WStype_t type, uint8_t *payload, size_t length)
     {
     }
 }
+
 void ws_connect()
 {
     String server = IP_SERVER;
@@ -122,7 +129,8 @@ void send_pcm_task(void *param)
 static void update_state()
 {
     ws.sendTXT("end_chat");
-    display_text("thinking", GC9A01A_YELLOW);
+    face_state = 3;
+
     pcm_sending = false;
     mic_enabled = false;
     i2s_stop(I2S_MIC_PORT);

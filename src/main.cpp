@@ -13,6 +13,8 @@ volatile bool mic_enabled = false;
 volatile bool pcm_sending = false;
 volatile bool spk_enabled = false;
 volatile bool pcm_receiving = false;
+volatile bool display_face_enabled = false;
+volatile uint8_t face_state = 1;
 
 void setup()
 {
@@ -30,6 +32,7 @@ void setup()
   xTaskCreatePinnedToCore(mic_task, "mic_task", 1024 * 20, NULL, 1, NULL, 0);
   xTaskCreatePinnedToCore(send_pcm_task, "send_pcm_task", 1024 * 12, NULL, 1, NULL, 0);
   xTaskCreatePinnedToCore(spk_task, "spk_task", 1024 * 12, NULL, 1, NULL, 0);
+  xTaskCreatePinnedToCore(display_face_task, "display_face_task", 1024 * 8, NULL, 1, NULL, 1);
 }
 
 void loop()

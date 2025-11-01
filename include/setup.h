@@ -6,12 +6,12 @@
 extern QueueHandle_t mic_to_server;
 extern QueueHandle_t server_to_spk;
 extern QueueHandle_t temp_is_silent;
-
+extern volatile uint8_t face_state;
 extern volatile bool mic_enabled;
 extern volatile bool spk_enabled;
 extern volatile bool pcm_sending;
 extern volatile bool pcm_receiving;
-
+extern volatile bool display_face_enabled;
 struct PcmChunk
 {
     int16_t *pcm;
@@ -45,7 +45,7 @@ struct PcmChunk
 #define TFT_SDA 47
 #define TFT_SCL 21
 #define TFT_BL -1
-#define SPI_FREQUENCY 40000000
+#define SPI_FREQUENCY 80000000
 
 // LED
 #define LED_PIN 48
